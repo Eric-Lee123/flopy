@@ -392,12 +392,21 @@ class ModflowUpw(Package):
         if model.verbose:
             print("   loading ipakcb, HDRY, NPUPW, IPHDRY...")
         t = line_parse(line)
-        ipakcb, hdry, npupw, iphdry = (
-            int(t[0]),
-            float(t[1]),
-            int(t[2]),
-            int(t[3]),
-        )
+        #### IN Visual Modflow files, there is no "iphdry" in the "upw" file. It will report "IndexError" if we load nwt files from Vmode.
+       try:    
+            ipakcb, hdry, npupw, iphdry = (  
+                int(t[0]),           
+                float(t[1]),           
+                int(t[2]),           
+                int(t[3]),          
+            )                          
+        except IndexError:  
+            ipakcb, hdry, npupw, iphdry = (  
+                int(t[0]),  
+                float(t[1]),  
+                int(t[2]),   
+                0,   
+            )  
 
         # options
         noparcheck = False
